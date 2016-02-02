@@ -1,7 +1,7 @@
 {
-  "name": "lovelive-final-live",
+  "name": "webpack_base",
   "version": "1.0.0",
-  "description": "koa,webpack",
+  "description": "webpack",
   "main": "index.js",
   "scripts": {
     "start": "npm run dev",
@@ -15,7 +15,7 @@
   "keywords": [
     "webpack"
   ],
-  "author": "me",
+  "author": "GSSxGSS",
   "license": "MIT",
   "dependencies": {
     "css-loader": "^0.23.1",
