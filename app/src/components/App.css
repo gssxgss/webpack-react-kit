@@ -2,3 +2,7 @@ body {
   background: black;
   color: white;
 }
+
+p {
+  text-decoration: underline;
+}

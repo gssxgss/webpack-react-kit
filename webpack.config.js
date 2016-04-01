@@ -1,47 +1,52 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
-const ROOT_PATH = path.resolve(__dirname);
+const PATH = {
+  ROOT: path.resolve(__dirname, "app"),
+}
+const FOLDER = {
+  SRC: "src",
+}
 
 const isProd = () => {
-  return process.env.NODE_ENV === "production";
+  return process.env.NODE_ENV === 'production';
 }
 
 module.exports = {
-  devtool: isProd() ? "" : "source-map",
+  devtool: isProd() ? '' : 'source-map',
   entry: [
-    path.resolve(ROOT_PATH, "app/src/index"),
+    path.resolve(PATH.ROOT, 'src/index'),
   ],
   module: {
     preLoaders: [
       {
         test: /\.jsx?$/,
-        loaders: isProd() ? [] : ["eslint"],
-        include: path.resolve(ROOT_PATH, "app"),
+        loaders: isProd() ? [] : ['eslint'],
+        include: path.resolve(PATH.ROOT),
       }
     ],
     loaders: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ["react-hot", "babel"]
+        loaders: ['react-hot', 'babel']
       }, {
-        test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        test: /\.css$/,
+        loaders: ['style', 'css', 'postcss']
       }
     ],
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"],
+    extensions: ['', '.js', '.jsx'],
   },
   output: {
-    path: isProd() ? path.resolve(ROOT_PATH, "app/dist") : path.resolve(ROOT_PATH, "app/build"),
-    publicPath: "/",
-    filename: "bundle.js",
+    path: isProd() ? path.resolve(PATH.ROOT, 'dist') : path.resolve(PATH.ROOT, 'build'),
+    publicPath: '/',
+    filename: 'bundle.js',
   },
   devServer: {
-    contentBase: path.resolve(ROOT_PATH, "app/build"),
+    contentBase: path.resolve(PATH.ROOT, 'build'),
     historyApiFallback: true,
     hot: true,
     inline: true,
@@ -50,12 +55,23 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      title: "Hello, World!"
+      title: 'Hello, World!'
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
     }),
-  ]
+  ],
+  postcss: () => {
+    return [
+      require('precss'),
+      require('autoprefixer')({
+        browsers: ['last 2 versions'],
+      }),
+      require('postcss-assets')({
+        loadPath: ['images/'],
+      }),
+    ];
+  },
 };
